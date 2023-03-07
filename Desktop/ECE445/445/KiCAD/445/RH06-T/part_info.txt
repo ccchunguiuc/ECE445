@@ -1,9 +1,0 @@
-Manufacturer=Diodes Inc.
-PartNumber=RH06-T
-PartCategory=Bridge Rectifier
-PackageCategory=Small Outline Packages
-PinCount=4
-Version=1.1
-Released=2020-06-11 08:55:33
-Downloaded=2023-03-06 05:48:37
-3D=Y
