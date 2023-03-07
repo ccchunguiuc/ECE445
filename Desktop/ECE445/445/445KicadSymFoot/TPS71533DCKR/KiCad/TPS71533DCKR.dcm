@@ -1,0 +1,9 @@
+EESchema-DOCLIB  Version 2.0
+#
+$CMP TPS71533DCKR
+D TPS71533DCKR, Low Dropout Voltage Regulator, 0.05A, 3.3V +/-4%, 2.5 to 24Vin, 0.32W, 5-Pin SC-70
+K
+F https://datasheet.datasheetarchive.com/originals/distributors/Datasheets-SFU2/DSASFU100034056.pdf
+$ENDCMP
+#
+#End Doc Library

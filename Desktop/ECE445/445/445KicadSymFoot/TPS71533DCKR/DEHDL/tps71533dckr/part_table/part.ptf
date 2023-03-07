@@ -1,0 +1,11 @@
+FILE_TYPE = MULTI_PHYS_TABLE;
+
+PART 'TPS71533DCKR'
+CLASS = IC
+{========================================================================================}
+:"MANUFACTURER_NAME", "MANUFACTURER_PART_NUMBER"= "PART_NUMBER", "JEDEC_TYPE", "PACK_TYPE", "MOUSER_PART_NUMBER", "MOUSER_PRICE/STOCK", "DESCRIPTION", "DATASHEET", "HEIGHT";
+{========================================================================================}
+ "Texas Instruments", "TPS71533DCKR" (!) = "", "SOT65P210X110-5N", "SOT23 (5-Pin)", "595-TPS71533DCKR", "https://www.mouser.co.uk/ProductDetail/Texas-Instruments/TPS71533DCKR?qs=UGVLDq%2F29uheQ5adrJJj1w%3D%3D", "TPS71533DCKR, Low Dropout Voltage Regulator, 0.05A, 3.3V +/-4%, 2.5 to 24Vin, 0.32W, 5-Pin SC-70", "https://datasheet.datasheetarchive.com/originals/distributors/Datasheets-SFU2/DSASFU100034056.pdf", "1.1 mm"
+END_PART
+
+END.
