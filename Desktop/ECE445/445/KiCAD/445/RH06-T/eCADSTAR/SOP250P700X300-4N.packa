@@ -1,0 +1,13 @@
+(unit MM)
+
+(package "RH06-T"
+    (type UNDEF)
+    (uver 2)
+    (cuser "SamacSys")
+    (uuser "SamacSys")
+    (utime 2020-06-11-08:55:33)
+    (mountForm default
+        (footprintRef "SOP250P700X300-4N")
+        (spec "System")
+    )
+)

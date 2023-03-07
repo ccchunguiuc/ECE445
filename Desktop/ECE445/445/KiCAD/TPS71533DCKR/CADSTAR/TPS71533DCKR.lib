@@ -1,0 +1,16 @@
+.TPS71533DCKR :1 ;TPS71533DCKR, Low Dropout Voltage Regulator, 0.05A, 3.3V +/-4%, 2.5 to 24Vin, 0.32W, 5-Pin SC-70
+SOT65P210X110-5N
+*STM IC
+*NGS
+*PLB 1="FB/NC" 2="GND" 3="NC" 4="IN" 5="OUT"
+*MXP 5
+*DFN TPS71533DCKR
+~!Mouser Part Number (595-TPS71533DCKR)
+~!Link Mouser Price/Stock (https://www.mouser.co.uk/ProductDetail/Texas-Instruments/TPS71533DCKR?qs=UGVLDq%2F29uheQ5adrJJj1w%3D%3D)
+~!Manufacturer_Name (Texas Instruments)
+~!Manufacturer_Part_Number (TPS71533DCKR)
+~!Link Datasheet (https://datasheet.datasheetarchive.com/originals/distributors/Datasheets-SFU2/DSASFU100034056.pdf)
+~!Height (1.1mm)
+~!3D_Model (TPS71533DCKR)
+TPS71533DCKR
+1.1!U 2.1!U 3.1!U 4.1!U 5.1!U 

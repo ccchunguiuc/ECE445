@@ -1,0 +1,11 @@
+FILE_TYPE = MULTI_PHYS_TABLE;
+
+PART 'RH06_T'
+CLASS = DISCRETE
+{========================================================================================}
+:"MANUFACTURER_NAME", "MANUFACTURER_PART_NUMBER"= "PART_NUMBER", "JEDEC_TYPE", "PACK_TYPE", "MOUSER_PART_NUMBER", "MOUSER_PRICE/STOCK", "DESCRIPTION", "DATASHEET", "HEIGHT";
+{========================================================================================}
+ "Diodes Inc.", "RH06-T" (!) = "", "SOP250P700X300-4N", "Small Outline Packages", "621-RH06-T", "https://www.mouser.co.uk/ProductDetail/Diodes-Incorporated/RH06-T?qs=sxN%252BoM2fis%2FIz4Q66ep0xQ%3D%3D", "Bridge Rectifiers 0.5A 600V", "https://www.diodes.com/assets/Datasheets/ds30137.pdf", "3 mm"
+END_PART
+
+END.
