@@ -13,4 +13,5 @@
   (lib (name "CKG57NX7T2W225M500JH")(type "Legacy")(uri "${KIPRJMOD}/445KicadSymFoot/symbols/CKG57NX7T2W225M500JH.lib")(options "")(descr ""))
   (lib (name "UCC28720D")(type "Legacy")(uri "${KIPRJMOD}/445KicadSymFoot/symbols/UCC28720D.lib")(options "")(descr ""))
   (lib (name "HC-SR04")(type "KiCad")(uri "${KIPRJMOD}/445KicadSymFoot/symbols/HC-SR04.kicad_sym")(options "")(descr ""))
+  (lib (name "EMC2-22RKI")(type "Legacy")(uri "${KIPRJMOD}/445KicadSymFoot/symbols/EMC2-22RKI.lib")(options "")(descr ""))
 )
