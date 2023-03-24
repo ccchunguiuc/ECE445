@@ -1,0 +1,9 @@
+EESchema-DOCLIB  Version 2.0
+#
+$CMP RH06-T
+D Bridge Rectifiers 0.5A 600V
+K
+F https://www.diodes.com/assets/Datasheets/ds30137.pdf
+$ENDCMP
+#
+#End Doc Library
