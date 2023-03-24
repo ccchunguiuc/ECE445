@@ -1,5 +1,0 @@
-(fp_lib_table
-  (version 7)
-  (lib (name "445")(type "KiCad")(uri "${KIPRJMOD}/445KicadSymFoot/footprints.pretty/445.pretty")(options "")(descr ""))
-  (lib (name "footprints")(type "KiCad")(uri "${KIPRJMOD}/445KicadSymFoot/footprints.pretty")(options "")(descr ""))
-)
