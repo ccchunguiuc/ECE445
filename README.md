@@ -1,2 +1,2 @@
 # ECE445
-PCB repository
+PCB/code repository
