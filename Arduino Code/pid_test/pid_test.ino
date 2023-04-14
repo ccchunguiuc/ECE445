@@ -1,7 +1,3 @@
-#include "Adafruit_VEML7700.h"
-
-Adafruit_VEML7700 veml = Adafruit_VEML7700();
-
 #define POT_PIN A0// PIN_PB4
 #define LUM_PIN A0// PIN_PB2
 #define MODE_PIN A0 //A3 //operation mode
@@ -11,16 +7,16 @@ Adafruit_VEML7700 veml = Adafruit_VEML7700();
 
 #define POT_MIN 0
 #define POT_MAX 1023
-#define LUM_MIN 0 
-#define LUM_MAX 300
+#define LUM_MIN 0 //TODO update
+#define LUM_MAX 1 //TODO update
 #define ULTRA_THRESHOLD 20
 
 float prev_lamp_state;
 
 //PID control related global variables
 unsigned long previousPIDMillis = 0;
-const long PID_POLLING_INTERVAL = 50;
-const float P_CONST = 0.5;
+const long PID_POLLING_INTERVAL = 100;
+const float P_CONST = 0.1;
 const float I_CONST = 0;
 const float D_CONST = 0;
 float prev_error;
@@ -39,12 +35,6 @@ float potentiometerStatus = 0;
 unsigned long previousPotMillis = 0;
 const long POT_POLLING_INTERVAL = 100;
 
-//luminosity related vals
-unsigned long previousLumMillis = 0;
-const long LUM_POLLING_INTERVAL = 500;
-
-float luminosityStatus = 0;
-
 /*
 TODO
 - write feedback and update loop
@@ -55,60 +45,19 @@ TODO
 
   //setup code, to run once:
 void setup() {
-  pinMode(LUM_PIN, INPUT);
-  pinMode(LAMP_PIN, OUTPUT);
-
-  pinMode(ULTRA_TRIG_PIN, OUTPUT); // Sets the trigPin as an Output
-  pinMode(ULTRA_ECHO_PIN, INPUT); // Sets the echoPin as an Input
 
 
-  //start lamp off
   digitalWrite(LAMP_PIN, convertToLampVal(0));
   prev_lamp_state = 0;
 
   total_error = 0;
   prev_error = convertLuminosityVal() - convertPotentiometerVal(); //target - current brightness
-  // P_CONST;
-  // I_CONST;
-  // D_CONST;
+  Serial.println(prev_error);
 
   Serial.begin(9600);
 
-
-  if (!veml.begin()) {
-    Serial.println("Lux Sensor not found");
-    while (1);
-  }
-  Serial.println("Lux sensor found");
-
-  // == OPTIONAL =====
-  // Can set non-default gain and integration time to
-  // adjust for different lighting conditions.
-  // =================
-  // veml.setGain(VEML7700_GAIN_1_8);
-  // veml.setIntegrationTime(VEML7700_IT_100MS);
-
-  Serial.print(F("Gain: "));
-  switch (veml.getGain()) {
-    case VEML7700_GAIN_1: Serial.println("1"); break;
-    case VEML7700_GAIN_2: Serial.println("2"); break;
-    case VEML7700_GAIN_1_4: Serial.println("1/4"); break;
-    case VEML7700_GAIN_1_8: Serial.println("1/8"); break;
-  }
-
-  Serial.print(F("Integration Time (ms): "));
-  switch (veml.getIntegrationTime()) {
-    case VEML7700_IT_25MS: Serial.println("25"); break;
-    case VEML7700_IT_50MS: Serial.println("50"); break;
-    case VEML7700_IT_100MS: Serial.println("100"); break;
-    case VEML7700_IT_200MS: Serial.println("200"); break;
-    case VEML7700_IT_400MS: Serial.println("400"); break;
-    case VEML7700_IT_800MS: Serial.println("800"); break;
-  }
-
-  veml.setLowThreshold(10000);
-  veml.setHighThreshold(20000);
-  veml.interruptEnable(true);
+  obstructedStatus = false;
+  potentiometerStatus = .7;
 }
 
 
@@ -116,19 +65,25 @@ void setup() {
 // main code here, to run repeatedly:
 void loop() {
 
-  pollPotentiometer();
-  pollUltrasonic();
-  pollLuminosity();
-
+  // pollPotentiometer();
+  // pollUltrasonic();
+  if(prev_lamp_state >= .69)
+  {
+    Serial.print("done"); Serial.println(prev_lamp_state);
+    delay(1000000);
+  }
+  
   // determine operation mode
   if (getOperationMode()) {
     if(!obstructedStatus) {
+      delay(10);
       //if in smart mode, get target brightness and update lamp
       float PID_change = pollPID();
-
+      
       float newLampSetting = prev_lamp_state + PID_change;
-      digitalWrite(LAMP_PIN, convertToLampVal(newLampSetting));
+      // digitalWrite(LAMP_PIN, convertToLampVal(newLampSetting));
       prev_lamp_state = newLampSetting;
+      Serial.println(newLampSetting);
     }
 
   }
@@ -137,6 +92,9 @@ void loop() {
     digitalWrite(LAMP_PIN, convertToLampVal(pot_val));
     prev_lamp_state = pot_val;
   }
+
+  
+
 
 
 
@@ -158,6 +116,7 @@ float convertLuminosityVal(){
 
 //return true for smart mode and false for user control
 bool getOperationMode() {
+  return true;
   return (digitalRead(MODE_PIN) == 0);
 }
 
@@ -166,16 +125,12 @@ float convertPotentiometerVal(){
 }
 
 //general function to convert a value in an input range to a target range of 0 to 1
-float convertInputVal(float val, float minVal, float maxVal){
+float convertInputVal(float val, float min, float max){
   //converts value from mapping from min-max to mapping from targetMin to targetMax
   float targetMin = 0;
   float targetMax = 1;
-  
-  if (maxVal-minVal == 0) {return maxVal;} //check for divide by 0
-  
-  float convertedVal = (val-minVal)/(maxVal-minVal) * (targetMax-targetMin) + targetMin;
-
-  return min(max(convertedVal,0.0),1.0);
+  //TODO check for divide by 0
+  return (val-min)/(max-min) * (targetMax-targetMin) + targetMin;
 }
 
 
@@ -184,7 +139,7 @@ void pollPotentiometer() {
   if (currentMillis - previousPotMillis >= POT_POLLING_INTERVAL) {
     previousPotMillis = currentMillis;
     potentiometerStatus = convertPotentiometerVal();
-    Serial.println(potentiometerStatus);
+    // Serial.println(potentiometerStatus);
   }
 }   
 
@@ -224,18 +179,18 @@ float pollPID() {
   if (deltaT >= PID_POLLING_INTERVAL) {
     previousPIDMillis = currentMillis;
     
-    float targetBrightness = convertPotentiometerVal(); //0 to 1 range
-    float curBrightness = convertLuminosityVal(); //0 to 1 range
-    float error = targetBrightness - curBrightness;
+    float targetBrightness = .7; //0 to 1 range
+    float curBrightness = prev_lamp_state; //0 to 1 range
+    float pid_error = targetBrightness - curBrightness;
 
-    float P_change = P_CONST * error;
+    float P_change = P_CONST * pid_error;
 
-    float total_error = total_error + error;
+    float total_error = total_error + pid_error;
     float I_change = I_CONST * total_error;
 
-    float delta_error = error - prev_error;
+    float delta_error = pid_error - prev_error;
     float D_change = D_CONST * delta_error;
-    prev_error = error;
+    prev_error = pid_error;
 
     float PID_change = P_change + I_change + D_change;
 
@@ -249,31 +204,6 @@ void resetPID() {
   //TODO: set prev_error;
   //TODO: set total_error; 
 }
-
-
-void pollLuminosity() {
-  unsigned long currentMillis = millis();
-  if (currentMillis - previousLumMillis >= LUM_POLLING_INTERVAL) {
-    previousLumMillis = currentMillis;
-
-    uint16_t irq = veml.interruptStatus();
-    if (irq & VEML7700_INTERRUPT_LOW) {
-      Serial.println("** Low threshold");
-    }
-    if (irq & VEML7700_INTERRUPT_HIGH) {
-      Serial.println("** High threshold");
-    }
-
-    Serial.print("raw val: ");  Serial.println(veml.readLux());
-    luminosityStatus = convertInputVal(veml.readLux(), LUM_MIN, LUM_MAX);
-
-    Serial.println(luminosityStatus);
-  }    
-  // Serial.print("raw ALS: "); Serial.println(veml.readALS());
-  // Serial.print("raw white: "); Serial.println(veml.readWhite());
-  // Serial.print("lux: "); Serial.println(veml.readLux());
-}
-
 
 //If the ultrasonic sensor has been obstructed or unobstructed for three consecutive polls, update the status accordingly
 void updateObstructedStatus() {  

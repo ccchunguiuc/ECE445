@@ -40,8 +40,12 @@ float convertInputVal(float val, float min, float max){
   //converts value from mapping from min-max to mapping from targetMin to targetMax
   float targetMin = 0;
   float targetMax = 1;
-  //TODO check for divide by 0
-  return (val-min)/(max-min) * (targetMax-targetMin) + targetMin;
+  
+  if (max-min == 0) {return max;} //check for divide by 0
+  
+  float convertedVal = (val-min)/(max-min) * (targetMax-targetMin) + targetMin;
+
+  return min(max(convertedVal,0.0),1.0);
 }
 
   
