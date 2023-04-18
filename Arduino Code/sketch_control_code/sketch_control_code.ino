@@ -21,7 +21,7 @@ float prev_lamp_state;
 //PID control related global variables
 unsigned long previousPIDMillis = 0;
 const long PID_POLLING_INTERVAL = 50;
-const float P_CONST = 0.8; // Increase this to reduce time to reach full brightness
+const float P_CONST = 0.5; // Increase this to reduce time to reach full brightness
 const float I_CONST = 0;
 const float D_CONST = 0;
 float prev_error;
@@ -190,7 +190,6 @@ void pollPotentiometer() {
   if (currentMillis - previousPotMillis >= POT_POLLING_INTERVAL) {
     previousPotMillis = currentMillis;
     potentiometerStatus = convertPotentiometerVal();
-    Serial.println(potentiometerStatus);
   }
 }
 
@@ -231,7 +230,6 @@ float pollPID() {
     previousPIDMillis = currentMillis;
 
     float targetBrightness = convertPotentiometerVal(); //0 to 1 range
-    targetBrightness = 0.66; // Only for testing purposes
     //    float curBrightness = convertLuminosityVal(); //0 to 1 range
     float curBrightness = pollLuminosity(); // 0 to 1 range
     float error = targetBrightness - curBrightness;
@@ -247,7 +245,6 @@ float pollPID() {
     prev_error = error;
 
     float PID_change = P_change + I_change + D_change;
-//    Serial.print("PID change: "); Serial.println(PID_change);
     return PID_change;
   }
   return 0; //if not enough time has passed for a new value, return no change in brightness
