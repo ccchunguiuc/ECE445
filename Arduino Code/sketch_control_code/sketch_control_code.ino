@@ -2,6 +2,7 @@
 
 Adafruit_VEML7700 veml = Adafruit_VEML7700();
 
+#define OUT_PIN 3// D3 square wave output
 #define POT_PIN A0// PIN_PB4
 #define LUM_PIN A0// PIN_PB2
 #define MODE_PIN A0 //A3 //operation mode
@@ -11,7 +12,7 @@ Adafruit_VEML7700 veml = Adafruit_VEML7700();
 
 #define POT_MIN 0
 #define POT_MAX 1023
-#define LUM_MIN 0 
+#define LUM_MIN 0
 #define LUM_MAX 300
 #define ULTRA_THRESHOLD 20
 
@@ -24,18 +25,18 @@ const float P_CONST = 0.5;
 const float I_CONST = 0;
 const float D_CONST = 0;
 float prev_error;
-float total_error; 
+float total_error;
 
 
 //ultrasonic related global variables
 unsigned long previousUltraMillis = 0;
 const long ULTRA_POLLING_INTERVAL = 500;
 bool obstructedStatus = false; //true if obstruction sensed
-int ultraHistory[] = {0,0,0};
+int ultraHistory[] = {0, 0, 0};
 int ultraHistPtr = 0;
 
 //keeps track of potentiometer position in 0 to 1 range
-float potentiometerStatus = 0; 
+float potentiometerStatus = 0;
 unsigned long previousPotMillis = 0;
 const long POT_POLLING_INTERVAL = 100;
 
@@ -46,15 +47,19 @@ const long LUM_POLLING_INTERVAL = 500;
 float luminosityStatus = 0;
 
 /*
-TODO
-- write feedback and update loop
-- write functions that interpret inputs and store to global vars
-- finish pin designations and vars
+  TODO
+  - write feedback and update loop
+  - write functions that interpret inputs and store to global vars
+  - finish pin designations and vars
 
 */
 
-  //setup code, to run once:
+//setup code, to run once:
 void setup() {
+  // Change pin 3 to 60 Hz PWM
+  pinMode(OUT_PIN, OUTPUT);
+  TCCR2B = 0b00000111; // x1024
+  TCCR2A = 0b00000011; // fast pwm
   pinMode(LUM_PIN, INPUT);
   pinMode(LAMP_PIN, OUTPUT);
 
@@ -118,37 +123,36 @@ void loop() {
 
   pollPotentiometer();
   pollUltrasonic();
-  pollLuminosity();
-
+  //  pollLuminosity();
   // determine operation mode
-  if (getOperationMode()) {
-    if(!obstructedStatus) {
-      //if in smart mode, get target brightness and update lamp
-      float PID_change = pollPID();
-
-      float newLampSetting = prev_lamp_state + PID_change;
-      digitalWrite(LAMP_PIN, convertToLampVal(newLampSetting));
-      prev_lamp_state = newLampSetting;
-    }
-
-  }
-  else {
-    int pot_val = convertPotentiometerVal();
-    digitalWrite(LAMP_PIN, convertToLampVal(pot_val));
-    prev_lamp_state = pot_val;
-  }
-
-
-
+  //  if (getOperationMode()) {
+  //    if(!obstructedStatus) {
+  //if in smart mode, get target brightness and update lamp
+  float PID_change = pollPID();
+  float newLampSetting = prev_lamp_state + PID_change;
+  digitalWrite(LAMP_PIN, convertToLampVal(newLampSetting));
+  //      int duty_cycle = map(newLampSetting, 0.0, 1.0, 0, 255);
+  Serial.print("newLampSetting: "); Serial.println(newLampSetting);
+  int duty_cycle = 255 - constrain(newLampSetting * 255, 0, 255);
+  Serial.print("Duty_cycle: "); Serial.println(float(duty_cycle / 255.0));
+  lightPWM(duty_cycle);
+  prev_lamp_state = newLampSetting;
+  //    }
+  //  }
+  //  else {
+  //    int pot_val = convertPotentiometerVal();
+  //    digitalWrite(LAMP_PIN, convertToLampVal(pot_val));
+  //    prev_lamp_state = pot_val;
+  //  }
 }
 
 //takes val from 0 to 1 and returns the proper signal for lamp strength
-float convertToLampVal(float val){
+float convertToLampVal(float val) {
   //TODO: convert from 0-1 to proper voltage signal to optocoupler
-  return val*5;
+  return val * 5;
 }
 
-float convertLuminosityVal(){
+float convertLuminosityVal() { // Convert from luminosity range to 0-1
   //TODO: convert from luminosity range to 0-1
   return digitalRead(LUM_PIN);
   // return convertInputVal(digitalRead(LUM_PIN), LUM_MIN, LUM_MAX);
@@ -161,21 +165,23 @@ bool getOperationMode() {
   return (digitalRead(MODE_PIN) == 0);
 }
 
-float convertPotentiometerVal(){
+float convertPotentiometerVal() {
   return convertInputVal(analogRead(POT_PIN), POT_MIN, POT_MAX);
 }
 
 //general function to convert a value in an input range to a target range of 0 to 1
-float convertInputVal(float val, float minVal, float maxVal){
+float convertInputVal(float val, float minVal, float maxVal) {
   //converts value from mapping from min-max to mapping from targetMin to targetMax
   float targetMin = 0;
   float targetMax = 1;
-  
-  if (maxVal-minVal == 0) {return maxVal;} //check for divide by 0
-  
-  float convertedVal = (val-minVal)/(maxVal-minVal) * (targetMax-targetMin) + targetMin;
 
-  return min(max(convertedVal,0.0),1.0);
+  if (maxVal - minVal == 0) {
+    return maxVal; //check for divide by 0
+  }
+
+  float convertedVal = (val - minVal) / (maxVal - minVal) * (targetMax - targetMin) + targetMin;
+
+  return min(max(convertedVal, 0.0), 1.0);
 }
 
 
@@ -186,14 +192,14 @@ void pollPotentiometer() {
     potentiometerStatus = convertPotentiometerVal();
     Serial.println(potentiometerStatus);
   }
-}   
+}
 
 //checks if its been ULTRA_POLLING_INTERVAL (.5sec) since last poll. if so, checks ultrasonic dist and updates obstructed status
 void pollUltrasonic() {
   unsigned long currentMillis = millis();
   if (currentMillis - previousUltraMillis >= ULTRA_POLLING_INTERVAL) {
     previousUltraMillis = currentMillis;
-      // Clears the trigPin
+    // Clears the trigPin
     digitalWrite(ULTRA_TRIG_PIN, LOW);
     delayMicroseconds(2);
     // Sets the trigPin on HIGH state for 10 micro seconds
@@ -217,15 +223,17 @@ void pollUltrasonic() {
   }
 }
 
-//checks for a new PID poll and if so, returns the change in 
+//checks for a new PID poll and if so, returns the change in
 float pollPID() {
   unsigned long currentMillis = millis();
   float deltaT = currentMillis - previousPIDMillis;
   if (deltaT >= PID_POLLING_INTERVAL) {
     previousPIDMillis = currentMillis;
-    
+
     float targetBrightness = convertPotentiometerVal(); //0 to 1 range
-    float curBrightness = convertLuminosityVal(); //0 to 1 range
+    targetBrightness = 1.0;
+    //    float curBrightness = convertLuminosityVal(); //0 to 1 range
+    float curBrightness = pollLuminosity();
     float error = targetBrightness - curBrightness;
 
     float P_change = P_CONST * error;
@@ -242,16 +250,16 @@ float pollPID() {
     return PID_change;
   }
   return 0; //if not enough time has passed for a new value, return no change in brightness
-}    
-  
+}
+
 void resetPID() {
   unsigned long previousPIDMillis = 0;
   //TODO: set prev_error;
-  //TODO: set total_error; 
+  //TODO: set total_error;
 }
 
 
-void pollLuminosity() {
+float pollLuminosity() {
   unsigned long currentMillis = millis();
   if (currentMillis - previousLumMillis >= LUM_POLLING_INTERVAL) {
     previousLumMillis = currentMillis;
@@ -267,8 +275,9 @@ void pollLuminosity() {
     Serial.print("raw val: ");  Serial.println(veml.readLux());
     luminosityStatus = convertInputVal(veml.readLux(), LUM_MIN, LUM_MAX);
 
-    Serial.println(luminosityStatus);
-  }    
+    Serial.print("Luminosity status: "); Serial.println(luminosityStatus);
+    return (luminosityStatus);
+  }
   // Serial.print("raw ALS: "); Serial.println(veml.readALS());
   // Serial.print("raw white: "); Serial.println(veml.readWhite());
   // Serial.print("lux: "); Serial.println(veml.readLux());
@@ -276,18 +285,21 @@ void pollLuminosity() {
 
 
 //If the ultrasonic sensor has been obstructed or unobstructed for three consecutive polls, update the status accordingly
-void updateObstructedStatus() {  
+void updateObstructedStatus() {
   if (ultraHistory[0] < ULTRA_THRESHOLD & ultraHistory[0] < ULTRA_THRESHOLD & ultraHistory[2] < ULTRA_THRESHOLD) {
     obstructedStatus = true;
   }
   else {
     if (ultraHistory[0] > ULTRA_THRESHOLD & ultraHistory[0] > ULTRA_THRESHOLD & ultraHistory[2] > ULTRA_THRESHOLD) {
-      if(obstructedStatus == true) {resetPID();} //if going back to normal operation, reset PID variables
+      if (obstructedStatus == true) {
+        resetPID(); //if going back to normal operation, reset PID variables
+      }
       obstructedStatus = false;
     }
   }
 }
 
-
-
-
+// Update the square wave PWM output based on sensors
+void lightPWM(int duty_cycle) {
+  analogWrite(OUT_PIN, duty_cycle);
+}
