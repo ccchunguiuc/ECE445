@@ -129,11 +129,11 @@ void loop() {
   //    if(!obstructedStatus) {
   //if in smart mode, get target brightness and update lamp
   float PID_change = pollPID();
-  float newLampSetting = prev_lamp_state + PID_change;
+  float newLampSetting = constrain(prev_lamp_state + PID_change, 0.0, 1.0);
   digitalWrite(LAMP_PIN, convertToLampVal(newLampSetting));
   //      int duty_cycle = map(newLampSetting, 0.0, 1.0, 0, 255);
   Serial.print("newLampSetting: "); Serial.println(newLampSetting);
-  int duty_cycle = 255 - constrain(newLampSetting * 255, 0, 255);
+  int duty_cycle = constrain(newLampSetting * 255, 0, 255);
   Serial.print("Duty_cycle: "); Serial.println(float(duty_cycle / 255.0));
   lightPWM(duty_cycle);
   prev_lamp_state = newLampSetting;
@@ -231,10 +231,11 @@ float pollPID() {
     previousPIDMillis = currentMillis;
 
     float targetBrightness = convertPotentiometerVal(); //0 to 1 range
-    targetBrightness = 1.0;
+    targetBrightness = 0.66; // Only for testing purposes
     //    float curBrightness = convertLuminosityVal(); //0 to 1 range
-    float curBrightness = pollLuminosity();
+    float curBrightness = pollLuminosity(); // 0 to 1 range
     float error = targetBrightness - curBrightness;
+    Serial.print("Error: "); Serial.println(error);
 
     float P_change = P_CONST * error;
 
@@ -246,7 +247,7 @@ float pollPID() {
     prev_error = error;
 
     float PID_change = P_change + I_change + D_change;
-
+//    Serial.print("PID change: "); Serial.println(PID_change);
     return PID_change;
   }
   return 0; //if not enough time has passed for a new value, return no change in brightness
