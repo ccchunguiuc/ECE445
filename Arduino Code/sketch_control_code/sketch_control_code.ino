@@ -21,7 +21,7 @@ float prev_lamp_state;
 //PID control related global variables
 unsigned long previousPIDMillis = 0;
 const long PID_POLLING_INTERVAL = 50;
-const float P_CONST = 0.5;
+const float P_CONST = 0.8; // Increase this to reduce time to reach full brightness
 const float I_CONST = 0;
 const float D_CONST = 0;
 float prev_error;
