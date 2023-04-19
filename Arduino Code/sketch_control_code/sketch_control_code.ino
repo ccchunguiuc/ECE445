@@ -7,8 +7,8 @@ Adafruit_VEML7700 veml = Adafruit_VEML7700();
 #define LUM_PIN A0// PIN_PB2
 #define MODE_PIN A0 //A3 //operation mode
 #define LAMP_PIN A0//A3
-# define ULTRA_ECHO_PIN A0
-# define ULTRA_TRIG_PIN A1
+# define ULTRA_ECHO_PIN A1
+# define ULTRA_TRIG_PIN 7
 
 #define POT_MIN 0
 #define POT_MAX 1023
@@ -166,6 +166,7 @@ bool getOperationMode() {
 }
 
 float convertPotentiometerVal() {
+  Serial.print("Pot raw value: "); Serial.println(analogRead(POT_PIN));
   return convertInputVal(analogRead(POT_PIN), POT_MIN, POT_MAX);
 }
 
@@ -210,15 +211,15 @@ void pollUltrasonic() {
     // Calculating the distance
     int distance = duration * 0.034 / 2;
 
-    // Serial.print("Distance: ");
-    // Serial.println(distance);
+    Serial.print("Distance: ");
+    Serial.println(distance);
     //update history array to replace oldest value using the ptr
     ultraHistory[ultraHistPtr] = distance;
     ultraHistPtr = (ultraHistPtr + 1) % 3;
 
     updateObstructedStatus();
-    // Serial.print("obstructed stats: ");
-    // Serial.println(obstructedStatus);
+     Serial.print("obstructed status: ");
+     Serial.println(obstructedStatus);
   }
 }
 
@@ -233,6 +234,7 @@ float pollPID() {
     //    float curBrightness = convertLuminosityVal(); //0 to 1 range
     float curBrightness = pollLuminosity(); // 0 to 1 range
     float error = targetBrightness - curBrightness;
+    Serial.print("Current brightness: "); Serial.print(curBrightness); Serial.print(" Target brightness: "); Serial.println(targetBrightness);
     Serial.print("Error: "); Serial.println(error);
 
     float P_change = P_CONST * error;
@@ -270,7 +272,7 @@ float pollLuminosity() {
       Serial.println("** High threshold");
     }
 
-    Serial.print("raw val: ");  Serial.println(veml.readLux());
+//    Serial.print("raw val: ");  Serial.println(veml.readLux());
     luminosityStatus = convertInputVal(veml.readLux(), LUM_MIN, LUM_MAX);
 
     Serial.print("Luminosity status: "); Serial.println(luminosityStatus);
