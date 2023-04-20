@@ -2,11 +2,12 @@
 
 Adafruit_VEML7700 veml = Adafruit_VEML7700();
 
-#define OUT_PIN 3// D3 square wave output
+#define LAMP_PIN 3// D3 square wave output
 #define POT_PIN A0// PIN_PB4
-#define LUM_PIN A0// PIN_PB2
-#define MODE_PIN A0 //A3 //operation mode
-#define LAMP_PIN A0//A3
+
+
+#define MODE_PIN 8 //A3 //operation mode
+
 # define ULTRA_ECHO_PIN A1
 # define ULTRA_TRIG_PIN 7
 
@@ -21,7 +22,7 @@ float prev_lamp_state;
 //PID control related global variables
 unsigned long previousPIDMillis = 0;
 const long PID_POLLING_INTERVAL = 50;
-const float P_CONST = 0.5; // Increase this to reduce time to reach full brightness
+const float P_CONST = 0.05; // Increase this to reduce time to reach full brightness
 const float I_CONST = 0;
 const float D_CONST = 0;
 float prev_error;
@@ -57,10 +58,10 @@ float luminosityStatus = 0;
 //setup code, to run once:
 void setup() {
   // Change pin 3 to 60 Hz PWM
-  pinMode(OUT_PIN, OUTPUT);
+  pinMode(LAMP_PIN, OUTPUT);
   TCCR2B = 0b00000111; // x1024
   TCCR2A = 0b00000011; // fast pwm
-  pinMode(LUM_PIN, INPUT);
+
   pinMode(LAMP_PIN, OUTPUT);
 
   pinMode(ULTRA_TRIG_PIN, OUTPUT); // Sets the trigPin as an Output
@@ -72,7 +73,7 @@ void setup() {
   prev_lamp_state = 0;
 
   total_error = 0;
-  prev_error = convertLuminosityVal() - convertPotentiometerVal(); //target - current brightness
+  prev_error = luminosityStatus - convertPotentiometerVal(); //target - current brightness
   // P_CONST;
   // I_CONST;
   // D_CONST;
@@ -121,29 +122,32 @@ void setup() {
 // main code here, to run repeatedly:
 void loop() {
 
+  // delay(1000); //TODO delete
+
   pollPotentiometer();
   pollUltrasonic();
   //  pollLuminosity();
   // determine operation mode
-  //  if (getOperationMode()) {
-  //    if(!obstructedStatus) {
+  if (getOperationMode()) {
+     if(!obstructedStatus) {
   //if in smart mode, get target brightness and update lamp
-  float PID_change = pollPID();
-  float newLampSetting = constrain(prev_lamp_state + PID_change, 0.0, 1.0);
-  digitalWrite(LAMP_PIN, convertToLampVal(newLampSetting));
-  //      int duty_cycle = map(newLampSetting, 0.0, 1.0, 0, 255);
-  Serial.print("newLampSetting: "); Serial.println(newLampSetting);
-  int duty_cycle = constrain(newLampSetting * 255, 0, 255);
-  Serial.print("Duty_cycle: "); Serial.println(float(duty_cycle / 255.0));
-  lightPWM(duty_cycle);
-  prev_lamp_state = newLampSetting;
-  //    }
-  //  }
-  //  else {
-  //    int pot_val = convertPotentiometerVal();
-  //    digitalWrite(LAMP_PIN, convertToLampVal(pot_val));
-  //    prev_lamp_state = pot_val;
-  //  }
+      float PID_change = pollPID();
+      float newLampSetting = constrain(prev_lamp_state + PID_change, 0.0, 1.0);
+      digitalWrite(LAMP_PIN, convertToLampVal(newLampSetting));
+      //      int duty_cycle = map(newLampSetting, 0.0, 1.0, 0, 255);
+      Serial.print("newLampSetting: "); Serial.println(newLampSetting);
+      int duty_cycle = constrain(newLampSetting * 255, 0, 255);
+      Serial.print("Duty_cycle: "); Serial.println(float(duty_cycle / 255.0));
+      lightPWM(duty_cycle);
+      prev_lamp_state = newLampSetting;
+      } 
+   }
+   else {
+     float newLampSetting = potentiometerStatus;
+     int duty_cycle = constrain(newLampSetting * 255, 0, 255);
+     lightPWM(duty_cycle);
+     prev_lamp_state = newLampSetting;
+   }
 }
 
 //takes val from 0 to 1 and returns the proper signal for lamp strength
@@ -152,11 +156,6 @@ float convertToLampVal(float val) {
   return val * 5;
 }
 
-float convertLuminosityVal() { // Convert from luminosity range to 0-1
-  //TODO: convert from luminosity range to 0-1
-  return digitalRead(LUM_PIN);
-  // return convertInputVal(digitalRead(LUM_PIN), LUM_MIN, LUM_MAX);
-}
 
 
 
@@ -301,5 +300,5 @@ void updateObstructedStatus() {
 
 // Update the square wave PWM output based on sensors
 void lightPWM(int duty_cycle) {
-  analogWrite(OUT_PIN, duty_cycle);
+  analogWrite(LAMP_PIN, duty_cycle);
 }

@@ -1,5 +1,5 @@
 
-# define POT_PIN A1
+# define POT_PIN A0
 #define POT_MIN 0
 #define POT_MAX 1023
 
@@ -33,6 +33,7 @@ void pollPotentiometer() {
 }
 
 float convertPotentiometerVal(){
+  Serial.print("Pot raw value: "); Serial.println(analogRead(POT_PIN));
   return convertInputVal(analogRead(POT_PIN), POT_MIN, POT_MAX);
 }
 
