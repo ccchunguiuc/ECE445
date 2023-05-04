@@ -1,0 +1,9 @@
+EESchema-DOCLIB  Version 2.0
+#
+$CMP 750314178
+D 100mVAC, Ls tie(1+4, 6+7), 100kHz
+K
+F https://www.we-online.com/components/products/datasheet/750314178.pdf
+$ENDCMP
+#
+#End Doc Library

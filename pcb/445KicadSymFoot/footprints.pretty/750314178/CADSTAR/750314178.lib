@@ -1,0 +1,16 @@
+.750314178 :1 ;100mVAC, Ls tie(1+4, 6+7), 100kHz
+"750314178"
+*STM T
+*NGS
+*PLB 1="1" 2="2" 3="3" 4="4" 5="5" 6="6" 7="7" 8="8"
+*MXP 8
+*DFN 750314178
+~!Mouser Part Number (-)
+~!Mouser Price/Stock (-)
+~!Manufacturer_Name (Wurth Elektronik)
+~!Manufacturer_Part_Number (750314178)
+~!Link Datasheet (https://www.we-online.com/components/products/datasheet/750314178.pdf)
+~!Height (5.97mm)
+~!3D_Model (750314178)
+"750314178"
+1.1!U 2.1!U 3.1!U 4.1!U 5.1!U 6.1!U 7.1!U 8.1!U 

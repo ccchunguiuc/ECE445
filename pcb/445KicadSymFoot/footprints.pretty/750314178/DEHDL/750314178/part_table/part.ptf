@@ -1,0 +1,11 @@
+FILE_TYPE = MULTI_PHYS_TABLE;
+
+PART '750314178'
+CLASS = DISCRETE
+{========================================================================================}
+:"MANUFACTURER_NAME", "MANUFACTURER_PART_NUMBER"= "PART_NUMBER", "JEDEC_TYPE", "PACK_TYPE", "MOUSER_PART_NUMBER", "MOUSER_PRICE/STOCK", "DESCRIPTION", "DATASHEET", "HEIGHT";
+{========================================================================================}
+ "Wurth Elektronik", "750314178" (!) = "", "750314178", "Other", "", "", "100mVAC, Ls tie(1+4, 6+7), 100kHz", "https://www.we-online.com/components/products/datasheet/750314178.pdf", "5.97 mm"
+END_PART
+
+END.

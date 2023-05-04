@@ -1,0 +1,148 @@
+;Proteus Design Interchange Format
+(PDIF
+ (vendor "SamacSys Limited")
+ (version 1 0)
+ (library
+  (part "750314178"
+   (description "100mVAC, Ls tie(1+4, 6+7), 100kHz")
+   (family "XFR")
+   (package "750314178")
+   (attribute "Datasheet Link" "https://www.we-online.com/components/products/datasheet/750314178.pdf")
+   (attribute "Geometry.Height" "5.97mm")
+   (attribute "Mouser Part Number" "")
+   (attribute "Mouser Price/Stock" "")
+   (attribute "Manufacturer_Name" "Wurth Elektronik")
+   (attribute "Manufacturer_Part_Number" "750314178")
+   (gate
+    (symbol "750314178")
+    (pin "1" 1 PS)
+    (pin "2" 2 PS)
+    (pin "3" 3 PS)
+    (pin "4" 4 PS)
+    (pin "5" 5 PS)
+    (pin "6" 6 PS)
+    (pin "7" 7 PS)
+    (pin "8" 8 PS)
+   )
+  )
+  (symbol "750314178"
+   (units THOU)
+   (origin (pt 0 0))
+   (graphic
+    (stroke 10)
+    (path (pt 200 100) (pt 600 100) (pt 600 -400) (pt 200 -400) (pt 200 100) (closed))
+   )
+   (terminal
+    (body (symbol "PIN") (pt 800 0) (rot 0) (mir X) (visible true))
+    (name (pt 230 0) (rot 0) (just MIDDLE LEFT) (visible true))
+    (number (pt 140 20) (rot 0) (just BOTTOM RIGHT) (visible true)))
+   (terminal
+    (body (symbol "PIN") (pt 800 -100) (rot 0) (mir X) (visible true))
+    (name (pt 230 0) (rot 0) (just MIDDLE LEFT) (visible true))
+    (number (pt 140 20) (rot 0) (just BOTTOM RIGHT) (visible true)))
+   (terminal
+    (body (symbol "PIN") (pt 800 -200) (rot 0) (mir X) (visible true))
+    (name (pt 230 0) (rot 0) (just MIDDLE LEFT) (visible true))
+    (number (pt 140 20) (rot 0) (just BOTTOM RIGHT) (visible true)))
+   (terminal
+    (body (symbol "PIN") (pt 800 -300) (rot 0) (mir X) (visible true))
+    (name (pt 230 0) (rot 0) (just MIDDLE LEFT) (visible true))
+    (number (pt 140 20) (rot 0) (just BOTTOM RIGHT) (visible true)))
+   (terminal
+    (body (symbol "PIN") (pt 0 -300) (rot 0) (mir 0) (visible true))
+    (name (pt 230 0) (rot 0) (just MIDDLE LEFT) (visible true))
+    (number (pt 140 20) (rot 0) (just BOTTOM RIGHT) (visible true)))
+   (terminal
+    (body (symbol "PIN") (pt 0 -200) (rot 0) (mir 0) (visible true))
+    (name (pt 230 0) (rot 0) (just MIDDLE LEFT) (visible true))
+    (number (pt 140 20) (rot 0) (just BOTTOM RIGHT) (visible true)))
+   (terminal
+    (body (symbol "PIN") (pt 0 -100) (rot 0) (mir 0) (visible true))
+    (name (pt 230 0) (rot 0) (just MIDDLE LEFT) (visible true))
+    (number (pt 140 20) (rot 0) (just BOTTOM RIGHT) (visible true)))
+   (terminal
+    (body (symbol "PIN") (pt 0 0) (rot 0) (mir 0) (visible true))
+    (name (pt 230 0) (rot 0) (just MIDDLE LEFT) (visible true))
+    (number (pt 140 20) (rot 0) (just BOTTOM RIGHT) (visible true)))
+  )
+  (symbol "PIN"
+   (units THOU)
+   (origin (pt 0 0))
+   (graphic
+    (stroke 10)
+    (path (pt 0 0) (pt 200 0))))
+  (symbol "PINSHORT"
+   (units THOU)
+   (origin (pt 0 0))
+   (graphic
+    (stroke 10)
+    (path (pt 0 0) (pt 100 0))))
+  (package "750314178"
+   (units MM)
+   (layer TASM
+    (graphic
+     (stroke 0.1)
+     (path
+      (closed true)
+      (pt -6.035 -5)
+      (pt 6.035 -5)
+      (pt 6.035 5)
+      (pt -6.035 5)
+      (pt -6.035 -5))))
+   (layer OCCA
+    (graphic
+     (stroke 0.1)
+     (path
+      (closed true)
+      (pt -7.31 6)
+      (pt 7.31 6)
+      (pt 7.31 -6)
+      (pt -7.31 -6)
+      (pt -7.31 6))))
+   (layer TSLK
+    (graphic
+     (stroke 0.2)
+     (path
+      (closed false)
+      (pt -6.035 -4)
+      (pt -6.035 -5)
+      (pt 6.035 -5)
+      (pt 6.035 -4.2))))
+   (layer TSLK
+    (graphic
+     (stroke 0.2)
+     (path
+      (closed false)
+      (pt -6.035 4)
+      (pt -6.035 5)
+      (pt 6.035 5)
+      (pt 6.035 4))))
+   (layer TSLK
+    (graphic
+     (stroke 0.1)
+     (path
+      (closed true)
+      (pt 6.7 3)
+      (arc (pt 6.700 3.000) (pt 6.700 2.950) (pt 6.800 3.050) (start 180.0) (sweep 180.0))
+      (pt 6.8 3)
+      (arc (pt 6.800 3.000) (pt 6.700 2.950) (pt 6.800 3.050) (start 180.0) (sweep .0))
+      (pt 6.7 3))))
+   (leg 1 (pt 5.460 3.000) (padstack 0))
+   (leg 2 (pt 5.460 1.000) (padstack 0))
+   (leg 3 (pt 5.460 -1.000) (padstack 0))
+   (leg 4 (pt 5.460 -3.000) (padstack 0))
+   (leg 5 (pt -5.460 -3.000) (padstack 0))
+   (leg 6 (pt -5.460 -1.000) (padstack 0))
+   (leg 7 (pt -5.460 1.000) (padstack 0))
+   (leg 8 (pt -5.460 3.000) (padstack 0))
+   (padstack 0
+    (plated false)
+    (pad (layer TCOP) (rectf 1.120 1.700 0 0 0.000))
+   )
+   (model "750314178.stp"
+    (euler 0 0 0)
+    (offset 0 0 0)
+   )
+  )
+ )
+)
