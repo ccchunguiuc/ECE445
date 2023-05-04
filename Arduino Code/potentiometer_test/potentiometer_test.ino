@@ -1,5 +1,9 @@
 
+<<<<<<< Updated upstream
 # define POT_PIN A0
+=======
+#define POT_PIN A1
+>>>>>>> Stashed changes
 #define POT_MIN 0
 #define POT_MAX 1023
 

@@ -75,7 +75,7 @@ void pollLuminosity() {
     Serial.print("raw val: ");  Serial.println(veml.readLux());
     luminosityStatus = convertInputVal(veml.readLux(), LUM_MIN, LUM_MAX);
 
-    Serial.println(luminosityStatus);
+    // Serial.println(luminosityStatus);
   }    
   // Serial.print("raw ALS: "); Serial.println(veml.readALS());
   // Serial.print("raw white: "); Serial.println(veml.readWhite());

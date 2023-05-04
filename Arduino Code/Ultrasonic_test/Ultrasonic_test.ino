@@ -1,6 +1,9 @@
 // # define TEST_PIN A0
-# define ULTRA_ECHO_PIN A0
-# define ULTRA_TRIG_PIN A1
+// # define ULTRA_ECHO_PIN A0
+// # define ULTRA_TRIG_PIN A1
+
+# define ULTRA_ECHO_PIN A1
+# define ULTRA_TRIG_PIN 7
 
 #define ULTRA_THRESHOLD 20
 

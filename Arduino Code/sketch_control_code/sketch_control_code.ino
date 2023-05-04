@@ -8,8 +8,8 @@ Adafruit_VEML7700 veml = Adafruit_VEML7700();
 
 #define MODE_PIN 8 //A3 //operation mode
 
-# define ULTRA_ECHO_PIN A1
-# define ULTRA_TRIG_PIN 7
+#define ULTRA_ECHO_PIN A1
+#define ULTRA_TRIG_PIN 7
 
 #define POT_MIN 0
 #define POT_MAX 1023
@@ -22,7 +22,7 @@ float prev_lamp_state;
 //PID control related global variables
 unsigned long previousPIDMillis = 0;
 const long PID_POLLING_INTERVAL = 50;
-const float P_CONST = 0.05; // Increase this to reduce time to reach full brightness
+const float P_CONST = 0.3; // Increase this to reduce time to reach full brightness
 const float I_CONST = 0;
 const float D_CONST = 0;
 float prev_error;
@@ -59,8 +59,8 @@ float luminosityStatus = 0;
 void setup() {
   // Change pin 3 to 60 Hz PWM
   pinMode(LAMP_PIN, OUTPUT);
-  TCCR2B = 0b00000111; // x1024
-  TCCR2A = 0b00000011; // fast pwm
+  // TCCR2B = 0b00000111; // x1024
+  // TCCR2A = 0b00000011; // fast pwm
 
   pinMode(LAMP_PIN, OUTPUT);
 
@@ -133,7 +133,7 @@ void loop() {
   //if in smart mode, get target brightness and update lamp
       float PID_change = pollPID();
       float newLampSetting = constrain(prev_lamp_state + PID_change, 0.0, 1.0);
-      digitalWrite(LAMP_PIN, convertToLampVal(newLampSetting));
+      // digitalWrite(LAMP_PIN, convertToLampVal(newLampSetting));
       //      int duty_cycle = map(newLampSetting, 0.0, 1.0, 0, 255);
       Serial.print("newLampSetting: "); Serial.println(newLampSetting);
       int duty_cycle = constrain(newLampSetting * 255, 0, 255);
@@ -271,7 +271,7 @@ float pollLuminosity() {
       Serial.println("** High threshold");
     }
 
-//    Serial.print("raw val: ");  Serial.println(veml.readLux());
+   Serial.print("raw val: ");  Serial.println(veml.readLux());
     luminosityStatus = convertInputVal(veml.readLux(), LUM_MIN, LUM_MAX);
 
     Serial.print("Luminosity status: "); Serial.println(luminosityStatus);
